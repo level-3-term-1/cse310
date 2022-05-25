@@ -5,7 +5,7 @@ unsigned long sdbmhash(string key)
 {
     unsigned long hash = 0;
     int c;
-    for (auto x : key)
+    for (char x : key)
         hash = c + (hash << 6) + (hash << 16) - hash;
 
     return hash;

@@ -22,7 +22,7 @@ public:
 
     bool insert(string key, string value)
     {
-        auto x = this->search(key);
+        symbol_info* x = this->search(key);
         if (x == nullptr)
         {
             // not found, now insert
@@ -39,7 +39,7 @@ public:
     symbol_info* search(string key)
     {
         unsigned long idx = call_hash(key);
-        auto x = this->arrayOfSymbolInfoList[idx].getHead();
+        symbol_info* x = this->arrayOfSymbolInfoList[idx].getHead();
         while (x != nullptr)
         {
             if (x->getName() == key)
@@ -53,7 +53,7 @@ public:
 
     bool dlt(string key)
     {
-        auto x = search(key);
+        symbol_info *x = search(key);
         if (x == nullptr)
         {
             return false;

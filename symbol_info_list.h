@@ -28,7 +28,7 @@ public:
     }
     void dlt(string k)
     {
-        auto x = head;
+        symbol_info *x = head;
         // cout << x->getKey() << " " << x->getValue() << endl;
         while (x->getName() != k)
         {
@@ -77,7 +77,7 @@ public:
     }
 
     void print(){
-        auto temp = head;
+        symbol_info *temp = head;
         while(temp != nullptr) {
             temp->print();
             temp->getNext();

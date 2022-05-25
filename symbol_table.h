@@ -44,9 +44,9 @@ inline bool symbol_table::remove(string name) {
 }
 
 inline symbol_info* symbol_table::lookup(string name) {
-    auto temp = this->scopeTable;
+    scope_table* temp = this->scopeTable;
     while(temp != nullptr){
-        auto symbolInfo = temp->search(name);
+        symbol_info* symbolInfo = temp->search(name);
         if(symbolInfo == nullptr){
             temp = temp->getParentScope();
         }
@@ -62,7 +62,7 @@ inline void symbol_table::printCurrentScopeTable() {
 }
 
 inline void symbol_table::printAllScopeTable() {
-    auto temp = this->scopeTable;
+    scope_table* temp = this->scopeTable;
     while(temp != nullptr) {
         temp->print();
         temp = temp->getParentScope();

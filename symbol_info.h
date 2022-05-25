@@ -31,6 +31,10 @@ public:
 
     bool getKhali() const { return khali; }
     void setKhali(bool khali_) { khali = khali_; }
+
+    void print() {
+        cout << "< " << name << " : " << type << " > ";
+    }
     
 };
 

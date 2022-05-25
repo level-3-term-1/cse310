@@ -75,4 +75,12 @@ public:
     {
         return head;
     }
+
+    void print(){
+        auto temp = head;
+        while(temp != nullptr) {
+            temp->print();
+            temp->getNext();
+        }
+    }
 };

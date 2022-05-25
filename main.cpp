@@ -1,71 +1,12 @@
 #include <bits/stdc++.h>
-#include "scopetable.h""
+#include "symbol_table.h"
 
 #define IN freopen("output.txt", "w+", stdout)
 #define OUT freopen("input.txt", "r+", stdin)
 
 using namespace std;
 
-bool insert(string key, int value, separate_chaining &sc1, separate_chaining &sc2, double_hashing &dh1, double_hashing &dh2, custom_probing &cp1, custom_probing &cp2)
-{
-    auto flag_sc = sc1.insert(key, value);
-    auto flag_dh = dh1.insert(key, value);
-    auto flag_cp = cp1.insert(key, value);
-    auto flag_sc2 = sc2.insert(key, value);
-    auto flag_dh2 = dh2.insert(key, value);
-    auto flag_cp2 = cp2.insert(key, value);
-    auto flag = flag_cp & flag_dh2 & flag_dh & flag_cp2 & flag_sc2 & flag_sc;
 
-    return flag;
-}
-void search(string key, separate_chaining &sc1, separate_chaining &sc2, double_hashing &dh1, double_hashing &dh2, custom_probing &cp1, custom_probing &cp2, bool probing = false)
-{
-    auto x_sc1 = sc1.search(key, false, probing);
-    // cout << "here1 " << x_sc1.first << " " << x_sc1.second << endl;
-    auto x_sc2 = sc2.search(key, false, probing);
-    // cout << "here2 " << x_sc2.first << " " << x_sc2.second << endl;
-    auto x_dh1 = dh1.search(key, false, probing);
-    // cout << "here3 " << x_dh1.first << " " << x_dh1.second << endl;
-    auto x_dh2 = dh2.search(key, false, probing);
-    // cout << "here4 " << x_dh2.first << " " << x_dh2.second << endl;
-    auto x_cp1 = cp1.search(key, false, probing);
-    // cout << "here5 " << x_cp1.first << " " << x_cp1.second << endl;
-    auto x_cp2 = cp2.search(key, false, probing);
-    // cout << "here6 " << x_cp2.first << " " << x_cp2.second << endl;
-    if (probing)
-        return;
-    if (x_sc1.second != nullptr && !x_sc1.second->getKhali())
-        cout << "found " << x_sc1.second->getKey() << " " << x_sc1.second->getValue() << endl;
-    else
-    {
-        cout << key << " not found" << endl;
-    }
-}
-void dlt(string key, separate_chaining &sc1, separate_chaining &sc2, double_hashing &dh1, double_hashing &dh2, custom_probing &cp1, custom_probing &cp2)
-{
-    auto x_sc1 = sc1.dlt(key);
-    // cout << "here1 " << x_sc1 << endl;
-    auto x_sc2 = sc2.dlt(key);
-    // cout << "here2 " << x_sc2 << endl;
-    auto x_dh1 = dh1.dlt(key);
-    // cout << "here3 " << x_dh1 << endl;
-    auto x_dh2 = dh2.dlt(key);
-    // cout << "here3 " << x_dh2 << endl;
-    auto x_cp1 = cp1.dlt(key);
-    // cout << "here3 " << x_cp1 << endl;
-    auto x_cp2 = cp2.dlt(key);
-    // cout << "here3 " << x_cp2 << endl;
-    if (x_sc1 == true)
-    {
-        cout << "successfully deleted" << endl;
-    }
-    else
-    {
-        cout << key << " not found" << endl;
-    }
-}
-
-bool file_input = true;
 
 int main()
 {

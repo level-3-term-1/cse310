@@ -12,7 +12,7 @@ private:
     symbol_info *prev;
 public:
     symbol_info(string n, string t): name(n), type(t){
-
+        next = nullptr;
     }
 
     ~symbol_info();
@@ -33,7 +33,7 @@ public:
     void setKhali(bool khali_) { khali = khali_; }
 
     void print() {
-        cout << "< " << name << " : " << type << " > ";
+        cout << "< " << name << " : " << type << "> ";
     }
     
 };

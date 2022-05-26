@@ -44,6 +44,7 @@ inline void symbol_table::exitScope() {
     }
     scope_table* temp = scopeTable;
     scopeTable = scopeTable->getParentScope();
+    temp->setFlagForDeletingParentScope(false);
     delete temp;
 }
 
@@ -62,7 +63,7 @@ inline bool symbol_table::remove(string name) {
 inline symbol_info* symbol_table::lookup(string name) {
     scope_table* temp = this->scopeTable;
     while(temp != nullptr){
-        symbol_info* symbolInfo = temp->search(name, true).second;
+        symbol_info* symbolInfo = temp->lookup(name, true).second;
         if(symbolInfo == nullptr){
             temp = temp->getParentScope();
         }
@@ -70,6 +71,7 @@ inline symbol_info* symbol_table::lookup(string name) {
             return symbolInfo;
         }
     }
+    // cout << "Not found" << endl;
     return nullptr;
 }
 

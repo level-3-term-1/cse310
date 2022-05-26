@@ -47,14 +47,12 @@ int main()
             if (x == "A")
             {
                 cout << s << " " << x << endl;
-                cout << endl;
                 symbolTable.printAllScopeTable();
                 cout << endl;
             }
             else if (x == "C")
             {
                 cout << s << " " << x << endl;
-                cout << endl;
                 symbolTable.printCurrentScopeTable();
                 cout << endl;
             }

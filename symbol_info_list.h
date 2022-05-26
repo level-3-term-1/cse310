@@ -33,7 +33,10 @@ public:
             delete tail;
             tail = temp;
         }
-        delete head;
+        delete tail;
+        // delete head;
+        // tail = nullptr;
+        // delete tail;
         // cout << endl;
     }
     int insert(string k, string v)
@@ -96,8 +99,11 @@ public:
         {
             temp->print();
             temp = temp->getNext();
-            // break;
+            cout << " ";
         }
+        // temp = nullptr;
+        // delete temp;
+        return;
     }
 
     pair<int, symbol_info *> search(string key)

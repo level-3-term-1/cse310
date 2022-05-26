@@ -38,20 +38,20 @@ inline void symbol_table::enterScope() {
 inline void symbol_table::exitScope() {
     // delete operation
 
-    // if(scopeTable == nullptr) {
-    //     cout << "no scope found" << endl;
-    //     return;
-    // }
+    if(scopeTable == nullptr) {
+        cout << "no scope found" << endl;
+        return;
+    }
     scope_table* temp = scopeTable;
     scopeTable = scopeTable->getParentScope();
     delete temp;
 }
 
 inline bool symbol_table::insert(string name, string type) {
-    // if(scopeTable == nullptr){
-    //     scopeTable = new scope_table(b_size, nullptr);
-    //     // return false;
-    // }
+    if(scopeTable == nullptr){
+        scopeTable = new scope_table(b_size, nullptr);
+        // return false;
+    }
     return scopeTable->insert(name, type);
 }
 

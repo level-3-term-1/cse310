@@ -7,62 +7,75 @@ private:
     symbol_info *tail;
     symbol_info *head;
 
+    int position(symbol_info *x)
+    {
+        int c = 0;
+        symbol_info *temp = head;
+        while (temp != tail)
+        {
+            temp = temp->getNext();
+            c++;
+        }
+        return c;
+    }
+
 public:
     symbol_info_list()
     {
         head = nullptr;
         tail = nullptr;
     }
-    void insert(string k, string v)
+    ~symbol_info_list()
+    {
+        // cout << "calling destructor of linked list" << endl;
+        while(tail != head) {
+            symbol_info* temp = tail->getPrev();
+            delete tail;
+            tail = temp;
+        }
+        delete head;
+        // cout << endl;
+    }
+    int insert(string k, string v)
     {
         if (isEmpty())
         {
             head = new symbol_info(k, v);
             tail = head;
-            return;
+            return position(tail);
         }
         symbol_info *y = new symbol_info(k, v);
-        y->setNext(tail);
+        y->setPrev(tail);
         tail->setNext(y);
         tail = tail->getNext();
+        return position(tail);
     }
-    void dlt(string k)
+    bool dlt(symbol_info *x)
     {
-        symbol_info *x = head;
-        // cout << x->getKey() << " " << x->getValue() << endl;
-        while (x->getName() != k)
+        if (x == head)
         {
-            // cout << x->getKey() << " " << x->getValue() << endl;
-            x = x->getNext();
-        }
-        // cout << "deleting dfsdfsdf" << endl;
-        if (x->getName() == k)
-        {
-            // cout << "deleting" << endl;
-            if (x == head)
+            // cout << "head" << endl;
+            head = x->getNext();
+            if (head == nullptr)
             {
-                // cout << "head" << endl;
-                head = x->getNext();
-                if (head == nullptr)
-                {
-                    // cout << "head = nullptr" << endl;
-                    tail = nullptr;
-                }
-                else
-                    head->setPrev(nullptr);
-            }
-            else if (x == tail)
-            {
-                tail = x->getPrev();
-                tail->setNext(nullptr);
+                // cout << "head = nullptr" << endl;
+                tail = nullptr;
             }
             else
-            {
-                x->getPrev()->setNext(x->getNext());
-                x->getNext()->setPrev(x->getPrev());
-            }
-            delete x;
+                head->setPrev(nullptr);
         }
+        else if (x == tail)
+        {
+            tail = x->getPrev();
+            tail->setNext(nullptr);
+        }
+        else
+        {
+            x->getPrev()->setNext(x->getNext());
+            x->getNext()->setPrev(x->getPrev());
+        }
+        delete x;
+        return true;
     }
     bool isEmpty()
     {
@@ -76,11 +89,28 @@ public:
         return head;
     }
 
-    void print(){
+    void print()
+    {
         symbol_info *temp = head;
-        while(temp != nullptr) {
+        while (temp != nullptr)
+        {
             temp->print();
-            temp->getNext();
+            temp = temp->getNext();
+            // break;
         }
+    }
+
+    pair<int, symbol_info *> search(string key)
+    {
+        symbol_info *x = head;
+        int pos = 0;
+        while (x != nullptr)
+        {
+            if (x->getName() == key)
+                return {pos, x};
+            pos++;
+            x = x->getNext();
+        }
+        return {-1, nullptr};
     }
 };

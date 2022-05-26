@@ -6,69 +6,88 @@ class scope_table
 {
 private:
     symbol_info_list *arrayOfSymbolInfoList;
-    long bucketSize;
+    unsigned long bucketSize;
     scope_table *parentScope;
     string id;
     int count;
 
 public:
-    scope_table(int s, scope_table* parent) : bucketSize(s), parentScope(parent)
+    scope_table(long s, scope_table *parent) : bucketSize(s), parentScope(parent)
     {
         arrayOfSymbolInfoList = new symbol_info_list[s];
-        id = parent->id + "." + to_string(parent->count);
         count = 0;
+        if (parent != nullptr)
+        {
+            id = parent->id + "." + to_string(parent->count);
+            cout << "New ScopeTable with id# " << id << " is created" << endl;
+        }
+        else
+            id = "1";
     }
     ~scope_table();
 
     bool insert(string key, string value)
     {
-        symbol_info* x = this->search(key);
+        symbol_info *x = this->search(key).second;
         if (x == nullptr)
         {
             // not found, now insert
-            this->arrayOfSymbolInfoList[call_hash(key)].insert(key, value);
+            unsigned int idx = call_hash(key);
+            int pos = this->arrayOfSymbolInfoList[idx].insert(key, value);
+            cout << "Inserted in ScopeTable# " << id << " at position " << idx << ", " << pos << endl;
             return true;
+        }
+        else
+        {
+            cout << "This word already exists" << endl
+                 << "< " << key << ", " << value << " > already exist in the currentScopeTable" << endl;
         }
         return false;
     }
 
-    unsigned long call_hash(string key){
+    unsigned int call_hash(string key)
+    {
         return sdbmhash(key) % bucketSize;
     }
 
-    symbol_info* search(string key)
+    pair<int, symbol_info *> search(string key, bool printResult = false)
     {
-        unsigned long idx = call_hash(key);
-        symbol_info* x = this->arrayOfSymbolInfoList[idx].getHead();
-        while (x != nullptr)
+        unsigned int idx = call_hash(key);
+        pair<int, symbol_info *> obj = this->arrayOfSymbolInfoList[idx].search(key);
+        if (printResult && obj.second != nullptr)
         {
-            if (x->getName() == key)
-            {
-                return x;
-            }
-            x = x->getNext();
+            string str = obj.first == -1 ? "not found" : "found in scopetable# " + id + " at position " + to_string(idx) + ", " + to_string(obj.first);
+            cout << str << endl;
         }
-        return nullptr;
+        return obj;
     }
 
     bool dlt(string key)
     {
-        symbol_info *x = search(key);
-        if (x == nullptr)
+        pair<int, symbol_info *> x = search(key, false);
+        if (x.second == nullptr)
         {
+            cout << key << " not found" << endl;
             return false;
         }
-        this->arrayOfSymbolInfoList[call_hash(key)].dlt(key);
+        cout << "found it" << endl;
+        if (this->arrayOfSymbolInfoList[call_hash(key)].dlt(x.second))
+        {
+            cout << "deleted entry at " << call_hash(key) << ", " << x.first << " in the current scopetable" << endl;
+        }
         return true;
     }
 
-    void print(){
+    void print()
+    {
+        cout << "Scopetable# " << id << endl
+             << endl;
         for (size_t i = 0; i < bucketSize; i++)
         {
             cout << i << " --> ";
             this->arrayOfSymbolInfoList[i].print();
+            cout << endl;
         }
-        
     }
 
     long getBucketSize() const { return bucketSize; }
@@ -81,4 +100,13 @@ public:
 
 scope_table::~scope_table()
 {
+    // cout << "calling the destructor of scope table" << endl;
+    cout << "ScopeTable with id " << id << " is removed" << endl << "destroying the scopetable" << endl;
+    parentScope = nullptr;
+    delete[] arrayOfSymbolInfoList;
+
+    // for (size_t i = 0; i < 1; i++)
+    // {
+    //     delete arrayOfSymbolInfoList;
+    // }
 }

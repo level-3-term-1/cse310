@@ -1,13 +1,12 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-unsigned long sdbmhash(string key)
+unsigned int sdbmhash(string key)
 {
-    unsigned long hash = 0;
-    int c;
-    for (char x : key)
+    unsigned int hash = 0;
+    for (auto c : key)
         hash = c + (hash << 6) + (hash << 16) - hash;
-
+        
     return hash;
 }
 

@@ -40,5 +40,8 @@ public:
 
 symbol_info::~symbol_info()
 {
-    delete next;
+    // cout << "calling destructor of symbol info" << endl;
+    next = nullptr;
+    // free(next);
+    // delete next;
 }

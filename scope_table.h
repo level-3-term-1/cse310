@@ -41,8 +41,7 @@ public:
         }
         else
         {
-            cout << "This word already exists" << endl
-                 << "< " << key << ", " << value << " > already exist in the currentScopeTable" << endl;
+            cout<< "<" << key << "," << value << "> already exists in current ScopeTable" << endl;
         }
         return false;
     }
@@ -56,9 +55,9 @@ public:
     {
         unsigned int idx = call_hash(key);
         pair<int, symbol_info *> obj = this->arrayOfSymbolInfoList[idx].search(key);
-        if (printResult)
+        if (printResult && obj.second == nullptr)
         {
-            string str = obj.first == -1 ? "Not found" : "Found in ScopeTable# " + id + " at position " + to_string(idx) + ", " + to_string(obj.first);
+            string str = "Not found";
             cout << str << endl;
         }
         return obj;
@@ -69,13 +68,15 @@ public:
         pair<int, symbol_info *> x = lookup(key, true);
         if (x.second == nullptr)
         {
-            cout << key << " not found" << endl;
+            cout << endl << key << " not found" << endl;
             return false;
         }
-        cout << "found it" << endl;
-        if (this->arrayOfSymbolInfoList[call_hash(key)].dlt(x.second))
+
+        unsigned int hash_value = call_hash(key);
+        cout << "Found in ScopeTable# "<< id << " at position " << hash_value << ", " << x.first << endl << endl;
+        if (this->arrayOfSymbolInfoList[hash_value].dlt(x.second))
         {
-            cout << "deleted entry at " << call_hash(key) << ", " << x.first << " in the current scopetable" << endl;
+            cout << "Deleted Entry " << hash_value << ", " << x.first << " from current ScopeTable" << endl;
         }
         return true;
     }
@@ -100,12 +101,14 @@ public:
     void setCount(int count_) { count = count_; }
 
     void setFlagForDeletingParentScope(bool flagForDeletingParentScope_) { flagForDeletingParentScope = flagForDeletingParentScope_; }
+
+    string getId() const { return id; }
 };
 
 scope_table::~scope_table()
 {
     // cout << "calling the destructor of scope table" << endl;
-    cout << "ScopeTable with id " << id << " removed" << endl;
+    // cout << "ScopeTable with id " << id << " removed" << endl;
     delete[] arrayOfSymbolInfoList;
     if(flagForDeletingParentScope)
         delete parentScope;

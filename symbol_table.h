@@ -25,7 +25,7 @@ symbol_table::symbol_table(int b_size) : b_size(b_size)
 
 symbol_table::~symbol_table()
 {
-    cout << "calling the destructor of symbol table" << endl;
+    // cout << "calling the destructor of symbol table" << endl;
     delete scopeTable;
 }
 
@@ -44,6 +44,7 @@ inline void symbol_table::exitScope() {
     }
     scope_table* temp = scopeTable;
     scopeTable = scopeTable->getParentScope();
+    cout << "ScopeTable with id " << temp->getId() << " removed" << endl;
     temp->setFlagForDeletingParentScope(false);
     delete temp;
 }
@@ -63,15 +64,16 @@ inline bool symbol_table::remove(string name) {
 inline symbol_info* symbol_table::lookup(string name) {
     scope_table* temp = this->scopeTable;
     while(temp != nullptr){
-        symbol_info* symbolInfo = temp->lookup(name, true).second;
-        if(symbolInfo == nullptr){
+        pair<int, symbol_info*> symbolInfoAndPosition = temp->lookup(name, false);
+        if(symbolInfoAndPosition.second == nullptr){
             temp = temp->getParentScope();
         }
         else {
-            return symbolInfo;
+            cout << "Found in ScopeTable# " + temp->getId() + " at position " + to_string(scopeTable->call_hash(name)) + ", " + to_string(symbolInfoAndPosition.first) << endl;
+            return symbolInfoAndPosition.second;
         }
     }
-    // cout << "Not found" << endl;
+    cout << "Not found" << endl;
     return nullptr;
 }
 
